@@ -1,0 +1,13 @@
+# 忽略数据库文件
+labinvoice.db
+
+# 忽略用户上传文件
+uploads/
+
+# 忽略 IDE 配置文件
+.idea/
+.vscode/
+
+# 忽略 Python 缓存
+__pycache__/
+*.pyc
