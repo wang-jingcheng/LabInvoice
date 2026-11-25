@@ -1,13 +1,44 @@
-# 忽略数据库文件
-labinvoice.db
+# Local data, backups and deployment settings
+/data/
+/uploads/
+/.backups/
+/.trash/
+/.cache/
+/.local/
+/gunicorn_conf.py
+/uwsgi.ini
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.pid
+*.log
+*.zip
+.env
+.env.*
+!.env.example
+*.key
+*.pem
 
-# 忽略用户上传文件
-uploads/
+# Python environments and generated test/release output
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+/.test-data/
+/test-results/
+/playwright-report/
+/dist/
+/build/
 
-# 忽略 IDE 配置文件
+# Editor and operating-system files
 .idea/
 .vscode/
-
-# 忽略 Python 缓存
-__pycache__/
-*.pyc
+.DS_Store
+Thumbs.db

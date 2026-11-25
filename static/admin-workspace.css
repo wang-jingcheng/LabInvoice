@@ -1,0 +1,531 @@
+/* ==========================================================================
+   LabInvoice v3.0 - Modern SaaS Admin Workspace
+   Inspired by UI/UX Pro Max (uupm.cc) Design Intelligence
+   Features: Glassmorphism Analytics Cards, Real-time Dashboard, Control Center
+   ========================================================================== */
+
+.admin-page .page-heading h1 {
+  margin: 0;
+  font-size: clamp(26px, 2.7vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+.admin-page [data-page="members"] .heading-actions { display: flex; }
+.admin-page .heading-actions [hidden] { display: none; }
+
+.admin-page .heading-actions .button.primary {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+.admin-page .heading-actions .button.primary:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+}
+
+/* --- Overview Analytics Section (Collection & Reimbursement) --- */
+.admin-page .overview-section {
+  margin-bottom: 24px;
+}
+.admin-page .collection-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.admin-page .collection-toolbar h2 {
+  font-size: 18px;
+  font-weight: 750;
+  color: var(--ink);
+}
+.admin-page .collection-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.admin-page .collection-summary,
+.admin-page .reimbursement-summary {
+  padding: 22px 24px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--surface-glass-border);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  min-width: 0;
+  transition: all 0.18s ease;
+}
+
+.admin-page .collection-summary {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(239, 246, 255, 0.65) 100%);
+  border-top: 3px solid var(--blue);
+}
+
+.admin-page .reimbursement-summary {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #1e3a8a 100%);
+  border-color: rgba(30, 41, 59, 0.6);
+  color: #ffffff;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.25), 0 0 20px rgba(37, 99, 235, 0.15);
+}
+
+.admin-page .overview-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 38px;
+}
+.admin-page .overview-heading .section-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+.admin-page .collection-summary .section-icon {
+  color: var(--blue);
+  background: var(--blue-soft);
+  border: 1px solid var(--blue-line);
+}
+.admin-page .reimbursement-summary .section-icon {
+  color: #60a5fa;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.admin-page .overview-heading h3 {
+  font-size: 15.5px;
+  font-weight: 700;
+}
+.admin-page .reimbursement-summary h3 {
+  color: #ffffff;
+}
+.admin-page .overview-amount {
+  margin: 10px 0 4px;
+  font: 750 clamp(28px, 3.2vw, 42px)/1.15 var(--mono);
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+.admin-page .collection-summary .overview-amount {
+  color: var(--ink);
+}
+.admin-page .collection-summary .overview-amount > span {
+  color: var(--blue);
+  font-weight: 600;
+  margin-right: 4px;
+}
+.admin-page .reimbursement-summary .overview-amount {
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+.admin-page .overview-note {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.admin-page .reimbursement-summary .overview-note,
+.admin-page .reimbursement-summary :is(.muted, small) {
+  color: #94a3b8;
+}
+.admin-page .reimbursement-summary .amount {
+  color: #ffffff;
+}
+
+/* Accordion Breakdown */
+.admin-page .task-breakdown {
+  margin-top: 14px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(226, 232, 240, 0.8);
+}
+.admin-page .reimbursement-summary .task-breakdown {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+.admin-page .task-breakdown summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  font-size: 13.5px;
+  font-weight: 650;
+  cursor: pointer;
+  color: var(--blue);
+  list-style: none;
+}
+.admin-page .reimbursement-summary .task-breakdown summary {
+  color: #93c5fd;
+}
+.admin-page .task-breakdown summary::-webkit-details-marker { display: none; }
+.admin-page .task-breakdown summary .icon,
+.admin-page .category-fold-button .icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: currentColor;
+  transition: transform 0.18s ease;
+}
+.admin-page .task-breakdown[open] summary .icon { transform: rotate(180deg); }
+.admin-page .category-fold-button[aria-expanded="false"] .icon { transform: rotate(-90deg); }
+
+.admin-page .task-amount-list {
+  margin: 10px 0 4px;
+  display: grid;
+  gap: 10px;
+}
+.admin-page .task-amount-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-sm);
+}
+.admin-page .reimbursement-breakdown { margin: 6px 0; }
+.admin-page .reimbursement-project {
+  border-color: rgba(255, 255, 255, 0.12);
+  padding: 10px 0;
+}
+
+/* --- Invoices Panel & Table Desk --- */
+.admin-page .board-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  align-items: start;
+}
+.admin-page .invoice-panel {
+  border-radius: var(--radius);
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-glass-border);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+.admin-page .invoice-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(248, 250, 252, 0.6);
+  flex-wrap: wrap;
+}
+.admin-page .invoice-panel-heading h2 {
+  font-size: 18px;
+  font-weight: 750;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.admin-page .invoice-panel-heading .muted {
+  margin: 3px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.admin-page .scope-tabs {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 4px;
+  display: inline-flex;
+  gap: 4px;
+}
+.admin-page .scope-tabs button {
+  min-height: 32px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+.admin-page .scope-tabs button:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.6);
+}
+.admin-page .scope-tabs button[aria-pressed=true] {
+  background: var(--white);
+  color: var(--blue);
+  border-color: rgba(226, 232, 240, 0.9);
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* Filters */
+.admin-page .invoice-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: rgba(248, 250, 252, 0.4);
+  border-bottom: 1px solid var(--line);
+}
+.admin-page .invoice-filters .filter-bar {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+.admin-page .invoice-filters .secondary-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0;
+}
+.admin-page .search-field {
+  position: relative;
+  width: 100%;
+}
+.admin-page .search-field input {
+  padding-left: 38px !important;
+  min-height: 40px !important;
+  font-size: 14px;
+  border-radius: 9px;
+  margin: 0;
+}
+.admin-page .search-field .icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+}
+.admin-page .secondary-filters select {
+  font-size: 13.5px;
+  min-height: 40px;
+  border-radius: 9px;
+}
+.admin-page .invoice-filters [data-action="new-manual-expense"] {
+  min-height: 40px;
+  border-radius: 9px;
+}
+
+.admin-page .category-fold-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  background: var(--surface-soft);
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Data Table */
+.admin-page .invoice-table {
+  font-size: 14px;
+}
+.admin-page .invoice-table thead {
+  background: #f1f5f9;
+  color: #475569;
+}
+.admin-page .invoice-table :is(td, th) {
+  border-color: var(--line);
+  padding: 12px 10px;
+}
+.admin-page .invoice-table .group-row td {
+  background: #f8fafc;
+  font-weight: 650;
+  color: var(--ink);
+}
+.admin-page .invoice-table .invoice-row:hover td {
+  background: rgba(241, 245, 249, 0.6);
+}
+.admin-page .invoice-table .invoice-row.selected td {
+  background: var(--blue-soft);
+}
+.admin-page .table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #f8fafc;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Right Rail: Funding Projects */
+.admin-page .right-rail {
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius);
+  background: var(--surface-glass);
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.admin-page .rail-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+.admin-page .rail-title h2 {
+  font-size: 17px;
+  font-weight: 750;
+  margin: 0;
+}
+.admin-page .project-archive-button {
+  width: 100%;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  border-radius: 9px;
+}
+.admin-page #projectList {
+  scrollbar-color: var(--line) transparent;
+  scrollbar-width: thin;
+}
+.admin-page .project-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.16s ease;
+}
+.admin-page .project-card:hover {
+  border-color: var(--blue-line);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+.admin-page .project-card.active {
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.6) 0%, rgba(255, 255, 255, 0.98) 100%);
+  border-color: var(--blue);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.14);
+}
+.admin-page .project-title strong {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.admin-page .project-code {
+  color: var(--muted);
+  font: 12.5px var(--mono);
+}
+
+/* Management View: Task Grid */
+.admin-page .task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+.admin-page .task-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.16s ease;
+}
+.admin-page .task-card:hover {
+  border-color: var(--blue-line);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+.admin-page .task-card h2 {
+  margin: 12px 0 6px;
+  font-size: 18px;
+  font-weight: 750;
+  color: var(--ink);
+}
+.admin-page .task-card time {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.admin-page .task-progress {
+  height: 6px;
+  background: var(--surface-soft);
+  border-radius: 3px;
+  margin: 18px 0 10px;
+  overflow: hidden;
+}
+.admin-page .task-progress span {
+  height: 100%;
+  display: block;
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+  border-radius: 3px;
+}
+.admin-page .task-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  margin-top: 14px;
+}
+.admin-page .task-card-footer .amount {
+  font: 750 18px var(--mono);
+  color: var(--blue);
+}
+
+/* Member Management Panel */
+.admin-page .members-panel .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.admin-page .members-panel .data-table th {
+  background: #f1f5f9;
+  padding: 12px 14px;
+  font-weight: 650;
+  color: #475569;
+}
+.admin-page .members-panel .data-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.member-management-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .project-archive-record {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .project-archive-record .amount {
+    white-space: normal;
+  }
+  .project-archive-record > .row {
+    margin-left: 0;
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+/* Responsive Adjustments */
+@media (min-width: 1200px) {
+  .admin-page .board-layout {
+    grid-template-columns: minmax(0, 1fr) clamp(270px, 24%, 350px);
+  }
+}
+@media (max-width: 1199px) {
+  .admin-page .board-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .admin-page .right-rail {
+    order: 0;
+  }
+}
+@media (max-width: 760px) {
+  .admin-page .collection-overview {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .admin-page .invoice-filters {
+    padding: 12px;
+  }
+}

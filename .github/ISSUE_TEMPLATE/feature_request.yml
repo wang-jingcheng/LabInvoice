@@ -1,0 +1,18 @@
+name: 建议功能
+description: 描述团队工作流中想改进的问题。
+title: "[Feature] "
+body:
+  - type: textarea
+    id: workflow
+    attributes:
+      label: 使用场景
+      description: 请说明遇到问题的角色、当前操作流程及遇到的困难。
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: 期望的结果
+      description: 请描述希望完成的操作或看到的结果。
+    validations:
+      required: true

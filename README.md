@@ -1,119 +1,128 @@
-# LabInvoice - 实验室发票报销管理系统
+# LabInvoice
 
-LabInvoice 是一个基于 Python Flask 和 Tailwind CSS 开发的轻量级、现代化的发票收集与报销管理系统。它专为实验室或小型团队设计，旨在解决发票收集繁琐、金额计算易错、纸质打印整理困难等痛点。系统支持发票金额自动智能识别提取、多类别动态管理、以及一键打包和合并打印功能。
+**给实验室和小团队的发票收集与报销整理工具。**
 
-## ✨ 核心特性 (Features)
+把发票、行程单和支付凭证收进一个工作台。成员按任务提交，管理员按经费项目核对、归类，再下载原始票据、CSV 汇总或打印用 PDF。
 
-### 👥 双角色权限系统
+*Self-hosted invoice collection and reimbursement preparation for research labs and small teams.*
 
-- **普通用户**：注册/登录账户，查看管理员派发的报销任务，按类别上传发票和附件，支持草稿箱功能，确认无误后最终提交。
-- **系统管理员**：拥有最高权限，可管理人员账户，发布报销任务，审查用户提交的发票及附件，进行金额的精准人工校准。
+[快速启动](#快速启动) · [体验演示](#体验演示) · [使用指南](docs/USAGE.md) · [部署与升级](docs/DEPLOYMENT.md) · [贡献](CONTRIBUTING.md)
 
-### 🤖 智能发票解析与统计
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](#快速启动)
+[![GitHub Stars](https://img.shields.io/github/stars/wang-jingcheng/LabInvoice?style=flat)](https://github.com/wang-jingcheng/LabInvoice/stargazers)
 
-- **PDF 文本智能提取**：依托底层的强弱锚点组合正则匹配算法（兼容 价税合计、小写、金额 或最大人民币数值等），精准提取电子发票 PDF 中的总金额。
-- **多维数据统计**：自动计算个人总计金额、全局报销总额，并按发票类别（如市内交通费、材料费等）提供分类小计。
-- **双向金额校准**：系统支持管理员针对用户提交的每一笔子分类进行独立的人工金额校准，校准后全局总额自动同步重算。
+![管理员在票据整理台查看收集金额、成员发票及经费项目](docs/images/workbench.png)
 
-### 📂 灵活的任务与类别管理
+*演示数据中的管理员票据整理台。*
 
-- **双任务模式**：发布任务时支持选择「日常业务报销」与「国内差旅费」。
-- **日常业务报销**：包含 市内交通费、专用材料费、科研招待费、邮电费、印刷费、其他 等 6 大类，附带详细的红/灰字动态智能提示。
-- **国内差旅费**：精简为 交通费、住宿费、其他费用 3 大类。
-- **动态防错验证**：自动根据任务类型和选择的发票类别切换前端表单，智能提示“必填项（如行程单）”或“选填项”。
+## 适合哪些工作
 
-### 🖨️ 极致的后期处理体验
+| 你要做的事 | LabInvoice 的做法 |
+| --- | --- |
+| 月底向实验室成员收票 | 创建收集任务、指定成员，查看待填写、草稿中和已完成状态 |
+| 一起提交发票与证明材料 | 按报销项保存草稿，分批追加 PDF、图片和附件，核对后正式提交 |
+| 按经费项目整理一批票据 | 按任务、成员和报销项筛选，勾选或拖放归类，逐张检查金额 |
+| 登记劳务费或只有纸质发票的报销 | 添加无电子发票报销项，同步计入任务和项目汇总 |
+| 向财务提交材料 | 下载原件及 CSV 明细，或选择主票和附件合并成 PDF |
+| 在自己的服务器保存资料 | Flask 应用配合 SQLite 与本地文件目录，无需单独部署数据库服务 |
 
-- **ZIP 一键打包**：管理员可一键下载当前任务下所有用户的原始发票和附件归档。
-- **一键合并打印**：系统可将数百张独立的 PDF/图片发票，自动按照“发票大类 -> 提交人姓名拼音”的顺序合并为一个单一的 PDF 文件，并在不同大类之间自动插入标准尺寸空白页，方便财务直接双面打印装订。
+<details>
+<summary>查看成员上传页面</summary>
 
-## 🛠️ 技术栈 (Tech Stack)
+![成员选择任务，向对应报销项添加主发票和附件，保存至草稿箱](docs/images/member.png)
 
-- **后端框架**：Python 3 / Flask
-- **数据库**：SQLite 3 (自带，无需额外部署，通过 labinvoice.db 持久化)
-- **前端 UI**：HTML5 / Tailwind CSS (CDN) / 原生 JavaScript (Fetch API)
+</details>
 
-### 核心第三方库：
+## 快速启动
 
-- **pypdf**：用于发票 PDF 的文本内容提取和多文件的合并拼接。
-- **Pillow**：用于将上传的图片类附件/发票动态转码为 PDF 格式以支持合并。
-- **pypinyin**：用于合并打印时，对不同提交人的姓名进行标准的拼音首字母排序。
-
-## 📁 目录结构 (Project Structure)
-
-```
-LabInvoice/          
-├── app.py                   # 后端核心程序（含路由、SQLite连接、业务逻辑、PDF解析引擎）
-├── labinvoice.db            # SQLite 数据库文件 (首次运行自动生成，含 users, windows, assignments 表)
-├── requirements.txt         # (可选) Python 依赖清单
-│
-├── templates/               # 前端 HTML 模板文件夹
-│   ├── login.html           # 普通用户登录页 (密码默认123456，支持持久化记住我)
-│   ├── register.html        # 普通用户注册页
-│   ├── index.html           # 普通用户工作台 (横排现代UI，草稿箱与发票分类提交流程)
-│   ├── admin_login.html     # 管理员专属安全登录通道
-│   └── admin_dashboard.html # 管理员系统控制台 (任务派发、进度监控、明细审查、合并打印)
-│
-└── uploads/                 # 用户上传文件存储根目录 (自动生成)
-    └── task_{id}/           # 按任务 ID 分类的文件夹
-        └── {用户名}/         # 按真实姓名分类的用户目录
-            ├── summary.json # (废弃预留) 旧版总金额校准文件
-            └── item_{id}/   # 单笔提交记录存放点
-                ├── 主发票_xxx.pdf
-                ├── 附件_xxx.jpg
-                └── meta.json # 该笔记录的元数据 (类型、解析金额、人工校准标记、备注等)
-```
-
-## 🚀 安装与部署 (Installation)
-
-### 1. 环境准备
-
-请确保您的服务器或本地计算机已安装 Python 3.8+。
-
-### 2. 安装依赖库
-
-在项目根目录下，打开终端/命令行，运行以下命令安装必要的 Python 库：
+需要 **Python 3.10 或以上**，建议使用 Python 3.12。首次启动会创建空白工作区。
 
 ```bash
-pip install Flask werkzeug pypdf Pillow pypinyin
-```
-
-### 3. 启动服务
-
-运行以下命令启动 Flask 后端服务器：
-
-```bash
+git clone https://github.com/wang-jingcheng/LabInvoice.git
+cd LabInvoice
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+export LABINVOICE_DATA_DIR="$PWD/data"
+export LABINVOICE_ADMIN_PASSWORD="$(python -c 'import secrets; print(secrets.token_urlsafe(18))')"
+printf '本次管理员密码 %s\n' "$LABINVOICE_ADMIN_PASSWORD"
 python app.py
 ```
 
-默认情况下，应用将在 http://0.0.0.0:5000 端口运行。
+<details>
+<summary>Windows PowerShell 命令</summary>
 
-## 📖 使用指南 (Usage Guide)
+```powershell
+git clone https://github.com/wang-jingcheng/LabInvoice.git
+cd LabInvoice
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+$env:LABINVOICE_DATA_DIR = Join-Path $PWD.Path "data"
+$env:LABINVOICE_ADMIN_PASSWORD = & .\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe(18))"
+Write-Output $env:LABINVOICE_ADMIN_PASSWORD
+.\.venv\Scripts\python.exe app.py
+```
 
-### 系统管理员 (Admin)
+</details>
 
-1. 访问 http://localhost:5000/admin/login 进入管理员专属登录页面。
-2. 默认系统预留密码设定在 app.py 顶部的 ADMIN_PASSWORD = 'jcwang' 变量中。
-3. 登录后进入控制台：
-   - **人员管理**：点击右上角切换至“人员管理”，为实验室成员预先创建账号（支持用户自行在首页注册）。
-   - **发布任务**：点击“发票管理”面板中的 + 新发布，填写任务名，选择任务类型（日常/差旅），并勾选需要收集的人员，确认派发。
-   - **审核与校准**：点击左侧历史任务卡片，在右侧表格中点击“审查记录”，可查阅用户提交的每一张凭证，并在相应的金额框中输入数字点击“保存校准”。
-   - **合并打印**：收集完毕后，点击 ✅ 结束任务 锁定提交。随后点击 🖨️ 合并打印 即可自动下载排版好的 PDF 用于打印报销单。
+- [管理员入口](http://127.0.0.1:5000/admin)使用刚生成的密码。添加成员并为他们发布第一个收集任务。
+- [成员入口](http://127.0.0.1:5000/)可注册或登录已有账号。分配到任务后即可上传票据。
+- [使用说明](http://127.0.0.1:5000/help)可直接打开。管理员可以编辑 Markdown、插入图片并预览。
 
-### 普通用户 (User)
+## 体验演示
 
-1. 访问主页 http://localhost:5000/。
-2. 若无账号点击底部“自行注册账户”，填写姓名与密码；若有账号直接登录。
-3. 登录后进入我的工作台，页面会展示管理员下发给您的所有待办任务。
-4. 点击进入某个“待填报”的任务：
-   - 在左侧选择正确的发票类别。
-   - 按照系统弹出的红星提示上传必填的主发票 PDF。
-   - （可选）上传对应的支付截图、行程单等附件，并填写备注。
-   - 点击 📥 保存此归类至草稿箱。此时系统会自动提取总额。
-   - 重复步骤 4，直到所有类别的发票均已上传至右侧列表中。
-   - 最后，点击底部醒目的蓝色按钮 🚀 确认无误，正式提交该任务，此时任务变为“已提交待审核”，锁定修改权限。
+想先看一遍完整流程，可以启动隔离演示。它会自行生成任务、经费项目和示例 PDF。
 
-## ⚠️ 注意事项 (Notes)
+```bash
+python -m pip install -r requirements-dev.txt
+python scripts/preview_server.py
+```
 
-- **上传文件限制**：为确保打印功能正常以及安全防护，主发票仅允许上传 .pdf 格式。附件支持常见图片、文档与压缩包，前端及后端均已加入后缀白名单防护。
-- **数据库重置**：如果由于需求变更需要彻底清空数据，可以直接删除根目录下的 labinvoice.db 和 uploads/ 文件夹，重启 app.py 后系统会自动重新初始化。
+| 入口 | 演示凭据 |
+| --- | --- |
+| [成员工作台](http://127.0.0.1:8791/) | 账号 `demo`，密码 `demo-only` |
+| [管理工作台](http://127.0.0.1:8791/admin) | 密码 `preview-admin-2026` |
+
+演示监听本机，数据保存在独立的 `.test-data/preview/`。正常工作区使用单独设置的管理员密码。
+
+## 从收集到交付
+
+1. 管理员给成员派发任务，成员按报销项上传主发票和附件，在草稿中逐张核对金额后提交。
+2. 管理员结束收集后，在整理台把票据关联到经费项目，核对报销项与金额，补录无电子发票的报销。
+3. 核对项目与成员合计后下载材料。收集任务结项后，可从归档项目继续查询或导出。
+
+系统从 PDF 的文本层尝试提取票面金额。图片、扫描件和未识别的 PDF 在提交前需人工补填。项目 ZIP 包含原件、CSV 和归档清单，合并 PDF 可按需选择能转换的附件。财务审核和付款沿用所在单位的流程。 [文件支持与操作细节](docs/USAGE.md)
+
+## 部署与数据
+
+| 环境变量 | 用途 |
+| --- | --- |
+| `LABINVOICE_DATA_DIR` | 数据目录。已有部署省略此项时沿用程序目录，建议新部署显式指定 |
+| `LABINVOICE_ADMIN_PASSWORD` | 设置管理员密码后开放后台登录 |
+| `LABINVOICE_SECRET_KEY` | 可选的会话签名密钥。未设置时，在数据库中持久化自动生成的密钥 |
+| `LABINVOICE_HOST` / `LABINVOICE_PORT` | 直接运行 `app.py` 的监听地址和端口，默认 `127.0.0.1:5000` |
+
+部署到服务器时，可使用 Gunicorn 和 HTTPS 反向代理。已有版本升级前应停服，备份 `labinvoice.db`、`uploads/` 和已有的 `.trash/` 后，再更新程序并启动自动迁移。 [部署指南](docs/DEPLOYMENT.md) · [升级与回滚](docs/UPGRADE.md)
+
+## 项目结构
+
+```text
+app.py        页面路由、登录、上传和管理 API
+storage.py    SQLite 迁移、历史票据适配与汇总
+expenses.py   无电子发票报销
+exports.py    原件 ZIP、CSV 与合并 PDF
+guide.py      站内使用说明
+templates/    Flask 页面模板
+static/       本地样式、交互与图标
+scripts/      隔离演示、备份、迁移与浏览器测试入口
+tests/        后端测试和浏览器测试
+docs/         使用、部署与升级指南
+vendor/       随附的 Mistune Markdown 解析器及其许可证
+```
+
+## 贡献与许可
+
+欢迎分享你们的收票流程、报告问题或改进文档与代码。如果 LabInvoice 帮你少整理一轮表格或聊天附件，欢迎给项目点个 **Star**。 [提交反馈](https://github.com/wang-jingcheng/LabInvoice/issues/new/choose) · [贡献指南](CONTRIBUTING.md) · [版本记录](CHANGELOG.md)
+
+项目采用 [MIT 许可证](LICENSE)。随附的 Mistune 采用 [BSD-3-Clause](vendor/MISTUNE-LICENSE)。

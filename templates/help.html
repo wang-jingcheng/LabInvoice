@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% from 'components.html' import brand, icon %}
+{% block title %}使用说明 · LabInvoice{% endblock %}
+{% block body %}
+<header class="public-header">
+  {{ brand(url_for('admin_dashboard' if session.get('admin_logged_in') else 'index')) }}
+  <a class="button secondary" href="{{ '/admin' if session.get('admin_logged_in') else '/' }}">{{ icon('arrow', 'icon back-icon') }}{{ '返回工作台' if session.get('admin_logged_in') or session.get('user_id') else '返回登录' }}</a>
+</header>
+<main id="main" class="guide-page" tabindex="-1">
+  <header class="guide-heading">
+    <span class="section-icon">{{ icon('book') }}</span>
+    <h1>使用说明</h1>
+  </header>
+  <article class="guide-content {{ 'markdown-content' if guide_format == 'markdown' else 'plain-content' }}">{{ guide_html }}</article>
+  <p class="guide-foot">具体报销要求以所在单位财务规定为准。</p>
+</main>
+{% endblock %}

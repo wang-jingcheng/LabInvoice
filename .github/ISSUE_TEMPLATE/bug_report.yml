@@ -1,0 +1,29 @@
+name: 报告问题
+description: 提交可重复验证的问题。
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: 请使用演示数据或脱敏示例。安全问题请通过仓库 Security 页的私密渠道报告。
+  - type: input
+    id: environment
+    attributes:
+      label: 运行环境
+      description: 请填写页面显示的 LabInvoice 版本、Python 版本和系统。
+      placeholder: v3.1.1 / Python 3.12 / Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 请说明使用成员还是管理员账号，并列出触发问题的操作。
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: 实际结果和期望结果
+      description: 可附脱敏截图或日志。
+    validations:
+      required: true

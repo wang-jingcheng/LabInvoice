@@ -1,0 +1,43 @@
+{% macro icon(name, class='icon') -%}
+<svg class="{{ class }}" aria-hidden="true"><use href="#i-{{ name }}"/></svg>
+{%- endmacro %}
+
+{% macro brand(href) -%}
+<a class="brand" href="{{ href }}">
+  <span class="brand-mark">{{ icon('receipt') }}</span>
+  <span class="brand-name">LabInvoice</span>
+  <span class="brand-badge">v{{ config.APP_VERSION }}</span>
+</a>
+{%- endmacro %}
+
+{% macro workspace_header(role, real_name='') -%}
+{% set is_admin = role == 'admin' %}
+{% set name = '管理员' if is_admin else (real_name or '成员') %}
+<header class="workspace-header workspace-header--{{ role }}">
+  <div class="workspace-header-inner">
+    {{ brand(url_for('admin_dashboard' if is_admin else 'index')) }}
+    {% if is_admin %}
+    <nav class="workspace-nav" id="adminNav" aria-label="管理员导航">
+      <button type="button" class="active" data-nav="invoices" aria-current="page">{{ icon('grid') }}<span>票据整理</span><span class="nav-count" id="navInvoiceCount"></span></button>
+      <button type="button" data-nav="tasks">{{ icon('folder') }}<span>收集任务</span><span class="nav-count" id="navTaskCount"></span></button>
+      <button type="button" data-nav="members">{{ icon('users') }}<span>成员管理</span></button>
+      <button type="button" data-nav="guide">{{ icon('book') }}<span>说明设置</span></button>
+    </nav>
+    {% else %}
+    <nav class="workspace-nav" aria-label="成员导航">
+      <a class="active" aria-current="page" href="{{ url_for('index') }}">{{ icon('grid') }}<span>我的报销任务</span></a>
+      <a href="{{ url_for('help_page') }}">{{ icon('book') }}<span>使用说明</span></a>
+    </nav>
+    {% endif %}
+    <div class="workspace-account">
+      {% if is_admin %}
+      <a class="icon-button" href="{{ url_for('help_page') }}" target="_blank" rel="noopener" aria-label="使用说明（在新标签页打开）" title="使用说明">{{ icon('help') }}</a>
+      {% else %}
+      <button type="button" class="icon-button" data-account="password" aria-label="修改密码" title="修改密码">{{ icon('key') }}</button>
+      {% endif %}
+      <div class="workspace-user" title="{{ name }}"><span class="workspace-avatar" aria-hidden="true">{{ name[:1] }}</span><span class="workspace-user-name">{{ name }}</span></div>
+      <a class="icon-button" href="{{ url_for('admin_logout' if is_admin else 'logout') }}" aria-label="退出登录" title="退出登录">{{ icon('exit') }}</a>
+    </div>
+  </div>
+</header>
+{%- endmacro %}

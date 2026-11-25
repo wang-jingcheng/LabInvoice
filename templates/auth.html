@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% from 'components.html' import brand, icon %}
+
+{% macro password_field(label, autocomplete, default_value=none, max_length=120) -%}
+<div class="auth-field">
+  <label for="authPassword">{{ label }}</label>
+  <div class="password-input">
+    <input id="authPassword" name="password" type="password" autocomplete="{{ autocomplete }}" required{% if max_length %} maxlength="{{ max_length }}"{% endif %}{% if default_value is not none %} value="{{ default_value }}"{% endif %}>
+    <button type="button" class="password-toggle" data-toggle-password aria-controls="authPassword" aria-label="显示密码" title="显示密码">
+      {{ icon('eye') }}
+    </button>
+  </div>
+</div>
+{%- endmacro %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='auth.css', v=asset_version) }}">
+{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block body %}
+<div class="auth-screen">
+  <div class="auth-watermark" aria-hidden="true"></div>
+  <header class="auth-header">
+    {{ brand(url_for('login')) }}
+    <a class="auth-help" href="{{ url_for('help_page') }}">{{ icon('book') }}使用说明</a>
+  </header>
+  <main id="main" class="auth-workarea" tabindex="-1">
+    <section class="auth-card" aria-labelledby="authTitle">
+      <header class="auth-card-heading">
+        <h1 id="authTitle">{% block auth_heading %}{% endblock %}</h1>
+        <p>{% block auth_intro %}{% endblock %}</p>
+      </header>
+      {% block auth_content %}{% endblock %}
+      <nav class="auth-links" aria-label="账户入口">{% block auth_switch %}{% endblock %}</nav>
+    </section>
+  </main>
+</div>
+{% endblock %}
